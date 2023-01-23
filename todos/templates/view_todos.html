@@ -1,0 +1,48 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href={% static 'style.css' %}>
+    <title>To-Do app</title>
+</head>
+<body>
+
+    <main>
+        <h1 class="main-title">Todos</h1>
+        <div class="main-form">
+            <form action="{% url 'create_todo' %}" method="POST">
+                {% csrf_token %}
+                <input type="text" name="title" placeholder="Title">
+                <textarea name="description" rows="3"></textarea>
+                <button>Save</button>
+            </form>
+        </div>
+        
+        {% for todo in todos %}
+        <div class="task-card">
+            <div>
+                <h3>
+                    {{todo.title}}
+                </h3>
+                <p>{{todo.description}}</p>
+            </div>
+            <div class="task-card--buttons">
+                <a href="{% url 'edit_todo' todo.id %}">Edit</a>
+                <form 
+                    action="{% url 'delete_todo' todo.id %}" 
+                    method="POST" 
+                    class="delete-form"
+                    >
+                    {% csrf_token %}
+                    <button>Delete</button>
+                </form>
+            </div>
+        </div>
+        {% endfor %}
+        
+    </main>
+</body>
+</html>
